@@ -19,14 +19,14 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 func Handle(req []byte) string {
 	// to produce messages
 	topic := "request"
-	kafkaIRL := "kafka.openfaas.9092"
+	kafkaURL := "kafka.openfaas.9092"
 
 	writer := newKafkaWriter(kafkaURL, topic)
 	defer writer.Close()
 
 	msg := kafka.Message{
 		Key:   []byte(fmt.Sprintf("Key: %s", uuid.New())),
-		Value: []byte(fmt.Sprint("Body: %s", string(req))),
+		Value: []byte(fmt.Sprintf("Body: %s", string(req))),
 	}
 	err := writer.WriteMessages(context.Background(), msg)
 	if err != nil {
