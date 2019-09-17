@@ -18,7 +18,7 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 // Handle a serverless request
 func Handle(req []byte) string {
 	// to produce messages
-	topic := "request"
+	topic := "response"
 	kafkaURL := "kafka.openfaas.9092"
 
 	writer := newKafkaWriter(kafkaURL, topic)
