@@ -9,6 +9,9 @@ functions:
     image: hbouvier/function-simple-kafka-message:latest
     secrets:
     - function-simple-kafka-consumer
+    readonly_root_filesystem: true
     annotations:
       topic: request
+    environment:
+      response_topic: response
 

@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	kafka "github.com/segmentio/kafka-go"
 	"io/ioutil"
+	"os"
 )
 
 func getSecretFile(secretFile string) (secretBytes []byte, err error) {
@@ -38,11 +39,12 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 // Handle a serverless request
 func Handle(req []byte) string {
 	// to produce messages
-	topic, topicErr := getSecretFileAsString("kafka-response-topic")
-	if topicErr != nil {
-		fmt.Println(topicErr)
-		return "error reading response topic secretr"
-	}
+	// topic, topicErr := getSecretFileAsString("kafka-response-topic")
+	// if topicErr != nil {
+	// 	fmt.Println(topicErr)
+	// 	return "error reading response topic secretr"
+	// }
+	topic := os.Getenv("response_topic")
 
 	kafkaURL, URLErr := getSecretFileAsString("kafka-url")
 	if URLErr != nil {
