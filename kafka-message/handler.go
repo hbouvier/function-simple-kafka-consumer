@@ -19,7 +19,7 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 func Handle(req []byte) string {
 	// to produce messages
 	topic := "response"
-	kafkaURL := "kafka.openfaas.9092"
+	kafkaURL := "kafka.openfaas:9092"
 
 	writer := newKafkaWriter(kafkaURL, topic)
 	defer writer.Close()
