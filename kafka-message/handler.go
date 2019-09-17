@@ -49,6 +49,8 @@ func Handle(req []byte) string {
 		fmt.Println(URLErr)
 		return "error reading url secret"
 	}
+	fmt.Sprintf("using kafka url: %s", kafkaURL)
+	fmt.Sprintf("using kafka topic: %s", topic)
 
 	writer := newKafkaWriter(kafkaURL, topic)
 	defer writer.Close()
