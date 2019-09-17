@@ -15,3 +15,8 @@ cd ..
 faas-cli build
 ```
 
+### To create the sealed secrets
+```bash
+~/bin/kubeseal --fetch-cert --controller-name ofc-sealedsecrets-sealed-secrets  > pub-cert.pem
+faas-cli cloud seal --name function-simple-kafka-consumer --literal kafka-response-topic=response --literal kafka-url=kafka.openfaas:9092
+```

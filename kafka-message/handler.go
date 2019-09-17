@@ -5,7 +5,27 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	kafka "github.com/segmentio/kafka-go"
+	"io/ioutil"
 )
+
+func getSecretFile(secretFile string) (secretBytes []byte, err error) {
+	// read from the openfaas secrets folder
+	secretBytes, err = ioutil.ReadFile("/var/openfaas/secrets/" + secretFile)
+	if err != nil {
+		// read from the original location for backwards compatibility with openfaas <= 0.8.2
+		secretBytes, err = ioutil.ReadFile("/run/secrets/" + secretFile)
+	}
+
+	return secretBytes, err
+}
+
+func getSecretFileAsString(secretFile string) (string, error) {
+	secret, err := getSecretFile(secretFile)
+	if err != nil {
+		return "", err
+	}
+	return string(secret), nil
+}
 
 func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 	return kafka.NewWriter(kafka.WriterConfig{
@@ -18,8 +38,17 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 // Handle a serverless request
 func Handle(req []byte) string {
 	// to produce messages
-	topic := "response"
-	kafkaURL := "kafka.openfaas:9092"
+	topic, topicErr := getSecretFileAsString("kafka-response-topic")
+	if topicErr != nil {
+		fmt.Println(topicErr)
+		return "error reading response topic secretr"
+	}
+
+	kafkaURL, URLErr := getSecretFileAsString("kafka-url")
+	if URLErr != nil {
+		fmt.Println(URLErr)
+		return "error reading url secret"
+	}
 
 	writer := newKafkaWriter(kafkaURL, topic)
 	defer writer.Close()
