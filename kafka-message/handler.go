@@ -14,15 +14,15 @@ func newKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 		Balancer: &kafka.LeastBytes{},
 	})
 }
+
 // Handle a serverless request
 func Handle(req []byte) string {
-        // to produce messages
+	// to produce messages
 	topic := "request"
 	kafkaIRL := "kafka.openfaas.9092"
 
 	writer := newKafkaWriter(kafkaURL, topic)
 	defer writer.Close()
-
 
 	msg := kafka.Message{
 		Key:   []byte(fmt.Sprintf("Key: %s", uuid.New())),
