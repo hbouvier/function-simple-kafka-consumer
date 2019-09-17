@@ -8,7 +8,7 @@ functions:
     handler: ./kafka-message
     image: hbouvier/function-simple-kafka-message:latest
     secrets:
-    - kafka
+    - function-simple-kafka-consumer
     annotations:
       topic: request
 
